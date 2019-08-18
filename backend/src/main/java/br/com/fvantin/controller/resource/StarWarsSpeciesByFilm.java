@@ -9,6 +9,7 @@ public class StarWarsSpeciesByFilm extends ResourceSupport {
     private String filmName;
     private String specieName;
     private List<String> species;
+    private String warningMessage;
 
     public StarWarsSpeciesByFilm() {
         super();
@@ -18,6 +19,10 @@ public class StarWarsSpeciesByFilm extends ResourceSupport {
         this.filmName = filmName;
         this.specieName = specieName;
         this.species = species;
+    }
+
+    public StarWarsSpeciesByFilm(String warningMessage) {
+        this.warningMessage = warningMessage;
     }
 
     public String getFilmName() {
@@ -42,5 +47,13 @@ public class StarWarsSpeciesByFilm extends ResourceSupport {
 
     public void setSpecies(List<String> species) {
         this.species = species;
+    }
+
+    public String getWarningMessage() {
+        return warningMessage;
+    }
+
+    public void setWarningMessage(String warningMessage) {
+        this.warningMessage = warningMessage;
     }
 }
