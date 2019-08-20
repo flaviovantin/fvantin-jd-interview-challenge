@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,8 +41,7 @@ public class FacadeService {
         //          --> return JSON with info about the species (name="Droid")
         //          --> only to hold the name
         //      4. get the list of all PeopleDTO and filter it by speciesId = x (Droid)
-        //          --> Filter by URL like /spe
-        //          --> a list containing all people with id = x
+        //          --> a list containing all people with speciesId = x
         //      5. go to the list in step 1 and join it with list of step 4 filtering all characters of the movie which peopleId = x
         //          --> a list with all people of species = Droid of the filmId = n
         //      6. return httpResponse to the frontend with the list of step 5
@@ -89,17 +89,31 @@ public class FacadeService {
         return starWarsSpeciesByFilm;
     }
 
-    public List<StarWarsFilm> getAllFilms() {
-        List<FilmDTO> filmDTOs = filmService.getAllFilms();
-        List<StarWarsFilm> starWarsFilms = new ArrayList<>();
-        for (FilmDTO filmDTO : filmDTOs) {
-            String id = filmDTO.getUrl().split("/")[5];
-            starWarsFilms.add(new StarWarsFilm(id, filmDTO.getTitle(), filmDTO.getEpisodeId()));
+    public Optional<List<StarWarsFilm>> getAllFilms() {
+        try {
+            List<FilmDTO> filmDTOs = filmService.getAllFilms();
+            List<StarWarsFilm> starWarsFilms = new ArrayList<>();
+            for (FilmDTO filmDTO : filmDTOs) {
+                String id = filmDTO.getUrl().split("/")[5];
+                starWarsFilms.add(new StarWarsFilm(id, filmDTO.getTitle(), filmDTO.getEpisodeId()));
+            }
+            return Optional.of(starWarsFilms);
+        } catch (Exception e) {
+            return Optional.empty();
         }
-        return starWarsFilms;
     }
 
-    public StarWarsFilm getFilmById(String filmId) {
+//    public Optional<StarWarsFilm> getFilmById(String filmId)  {
+//        try {
+//            FilmDTO filmDTO = filmService.getFilmById(filmId);
+//            String id = filmDTO.getUrl().split("/")[5];
+//            return Optional.of(new StarWarsFilm(id, filmDTO.getTitle(), filmDTO.getEpisodeId()));
+//        } catch (RestClientException re) {
+//            return Optional.empty();
+//        }
+//    }
+
+    public StarWarsFilm getFilmById(String filmId)  {
         FilmDTO filmDTO = filmService.getFilmById(filmId);
         String id = filmDTO.getUrl().split("/")[5];
         return new StarWarsFilm(id, filmDTO.getTitle(), filmDTO.getEpisodeId());
@@ -117,6 +131,8 @@ public class FacadeService {
 
     public StarWarsCharacter getCharacterById(String characterId) {
         PeopleDTO peopleDTO = characterService.getCharacterById(characterId);
+//        ResponseEntity<PeopleDTO> peopleDTOResponseEntity = characterService.getCharacterById(characterId);
+//        peopleDTOResponseEntity.
         String id = peopleDTO.getUrl().split("/")[5];
         return new StarWarsCharacter(id, peopleDTO.getName());
     }

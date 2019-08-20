@@ -1,10 +1,12 @@
 package br.com.fvantin.service;
 
-import br.com.fvantin.controller.resource.StarWarsCharacter;
 import br.com.fvantin.service.dto.PeopleDTO;
 import br.com.fvantin.service.dto.PeopleListDTO;
+import br.com.fvantin.service.exception.handler.SWApiResponseErrorHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,24 +16,29 @@ import java.util.List;
 @Service
 public class CharacterService {
 
-    final ClientHttpRequestInterceptor interceptor = (request, body, execution) -> {
-        request.getHeaders().add("user-agent", "spring");
-        return execution.execute(request, body);
-    };
+    private static final String SWAPI_API_PEOPLE = "https://swapi.co/api/people/";
+    private RestTemplate restTemplate;
+
+    @Autowired
+    public CharacterService(RestTemplateBuilder restTemplateBuilder) {
+        restTemplate = restTemplateBuilder
+                .additionalInterceptors((request, body, execution) -> {
+                    request.getHeaders().add("user-agent", "spring");
+                    return execution.execute(request, body);
+                })
+                .errorHandler(new SWApiResponseErrorHandler())
+                .build();
+    }
 
     public List<PeopleDTO> getAllCharacters() {
-
-        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-        RestTemplate restTemplate = restTemplateBuilder.additionalInterceptors(interceptor).build();
-        PeopleListDTO people = restTemplate.getForObject("https://swapi.co/api/people", PeopleListDTO.class);
+        PeopleListDTO people = restTemplate.getForObject(SWAPI_API_PEOPLE, PeopleListDTO.class);
 
         // Results from SWAPI.co are paged
         List<PeopleDTO> peopleDTOs = new ArrayList<>();
         boolean hasMoreResultPage = true;
         do {
             List<PeopleDTO> results = people.getResults();
-            for (int i = 0; i < results.size(); i++) {
-                PeopleDTO peopleDTO =  results.get(i);
+            for (PeopleDTO peopleDTO : results) {
                 peopleDTOs.add(peopleDTO);
             }
             if (people.getNext() == null) {
@@ -43,13 +50,13 @@ public class CharacterService {
         return peopleDTOs;
     }
 
+    // TODO
+
     public PeopleDTO getCharacterById(String characterId) {
-
-        // TODO refactor it!
-
-        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-        RestTemplate restTemplate = restTemplateBuilder.additionalInterceptors(interceptor).build();
-        return restTemplate.getForObject("https://swapi.co/api/people/" + characterId, PeopleDTO.class);
+        return restTemplate.getForObject(SWAPI_API_PEOPLE + characterId, PeopleDTO.class);
     }
 
+    public ResponseEntity<PeopleDTO> getCharacterById2(String characterId) {
+        return restTemplate.exchange(SWAPI_API_PEOPLE + characterId, HttpMethod.GET, null, PeopleDTO.class);
+    }
 }

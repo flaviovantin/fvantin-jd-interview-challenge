@@ -2,8 +2,8 @@ package br.com.fvantin.service;
 
 import br.com.fvantin.service.dto.SpeciesDTO;
 import br.com.fvantin.service.dto.SpeciesListDTO;
+import br.com.fvantin.service.exception.handler.SWApiResponseErrorHandler;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,24 +13,28 @@ import java.util.List;
 @Service
 public class SpeciesService {
 
-    final ClientHttpRequestInterceptor interceptor = (request, body, execution) -> {
-        request.getHeaders().add("user-agent", "spring");
-        return execution.execute(request, body);
-    };
+    private static final String SWAPI_API_SPECIES = "https://swapi.co/api/species/";
+    private RestTemplate restTemplate;
+
+    public SpeciesService(RestTemplateBuilder restTemplateBuilder) {
+        restTemplate = restTemplateBuilder
+                .additionalInterceptors((request, body, execution) -> { // TODO checar se necessario
+                    request.getHeaders().add("user-agent", "spring");
+                    return execution.execute(request, body);
+                })
+                .errorHandler(new SWApiResponseErrorHandler())
+                .build();
+    }
 
     public List<SpeciesDTO> getAllSpecies() {
-
-        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-        RestTemplate restTemplate = restTemplateBuilder.additionalInterceptors(interceptor).build();
-        SpeciesListDTO species = restTemplate.getForObject("https://swapi.co/api/species", SpeciesListDTO.class);
+        SpeciesListDTO species = restTemplate.getForObject(SWAPI_API_SPECIES, SpeciesListDTO.class);
 
         // Results from SWAPI.co are paged
         List<SpeciesDTO> speciesDTOs = new ArrayList<>();
         boolean hasMoreResultPage = true;
         do {
             List<SpeciesDTO> results = species.getResults();
-            for (int i = 0; i < results.size(); i++) {
-                SpeciesDTO speciesDTO =  results.get(i);
+            for (SpeciesDTO speciesDTO : results) {
                 speciesDTOs.add(speciesDTO);
             }
             if (species.getNext() == null) {
@@ -43,11 +47,6 @@ public class SpeciesService {
     }
 
     public SpeciesDTO getSpeciesById(String speciesId) {
-
-        // TODO refactor it!
-
-        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-        RestTemplate restTemplate = restTemplateBuilder.additionalInterceptors(interceptor).build();
-        return restTemplate.getForObject("https://swapi.co/api/species/" + speciesId, SpeciesDTO.class);
+        return restTemplate.getForObject(SWAPI_API_SPECIES + speciesId, SpeciesDTO.class);
     }
 }
