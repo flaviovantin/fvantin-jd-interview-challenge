@@ -26,7 +26,7 @@ public class FacadeService {
     @Autowired
     private SpeciesService speciesService;
 
-    public StarWarsSpeciesByFilm getSimilarSpeciesByFilm(String filmId, String characterId) {
+    public StarWarsSpeciesByFilm getSimilarSpeciesByFilm(Integer filmId, String characterId) {
 
         StarWarsSpeciesByFilm starWarsSpeciesByFilm = new StarWarsSpeciesByFilm();
 
@@ -50,6 +50,20 @@ public class FacadeService {
         FilmDTO filmDTO = filmService.getFilmById(filmId);
         PeopleDTO peopleDTO = characterService.getCharacterById(characterId);
 
+        // TODO MUDAR ABAIXO:
+        //      1. Guardar a lista characters que tem todos os personagens do filmId = 1
+        //          List<String> characters = filmDTO.getCharacters();
+        //          1.1. Se filmId nao existir, lançar exceção
+        //      2. Pegar a especie referente ao characterId = 2
+        //          PeopleDTO peopleDTO = characterService.getCharacterById(characterId);
+        //          String speciesId = speciesURL.split("/")[5];
+        //          SpeciesDTO speciesDTO = speciesService.getSpeciesById(speciesId);
+        //          String speciesName = speciesDTO.getName();
+        //          2.1. Se peopleId nao existir, lançar exceção
+        //      3. Filtrar a lista characters (passo 1) pegando somente os personagens que são da especie speciesId = 'Droid'
+        //          3.1. Se não há personagens da speciesId = 'Droid' na lista characters, retornar [] vazio e mensagem
+        //      4. Retornar a lista
+
         List<String> characters = filmDTO.getCharacters().stream()
                 .filter(c -> c.equalsIgnoreCase(peopleDTO.getUrl()))
                 .collect(Collectors.toList());
@@ -64,7 +78,7 @@ public class FacadeService {
             SpeciesDTO speciesDTO = speciesService.getSpeciesById(speciesId);
             String speciesName = speciesDTO.getName();
 
-            // Step 4
+            // Step 4 // TODO esse passo talvez nao seja necessario
             List<PeopleDTO> peopleDTOs = characterService.getAllCharacters();
             List<PeopleDTO> filteredPeopleDTOs = peopleDTOs.stream()
                     .filter(p -> p.getSpecies().stream().findFirst().orElse("").equalsIgnoreCase(speciesURL))
@@ -89,18 +103,25 @@ public class FacadeService {
         return starWarsSpeciesByFilm;
     }
 
-    public Optional<List<StarWarsFilm>> getAllFilms() {
-        try {
-            List<FilmDTO> filmDTOs = filmService.getAllFilms();
-            List<StarWarsFilm> starWarsFilms = new ArrayList<>();
-            for (FilmDTO filmDTO : filmDTOs) {
-                String id = filmDTO.getUrl().split("/")[5];
-                starWarsFilms.add(new StarWarsFilm(id, filmDTO.getTitle(), filmDTO.getEpisodeId()));
-            }
-            return Optional.of(starWarsFilms);
-        } catch (Exception e) {
-            return Optional.empty();
+    public List<StarWarsFilm> getAllFilms() {
+        List<FilmDTO> filmDTOs = filmService.getAllFilms();
+        List<StarWarsFilm> starWarsFilms = new ArrayList<>();
+        for (FilmDTO filmDTO : filmDTOs) {
+            String id = filmDTO.getUrl().split("/")[5];
+            starWarsFilms.add(new StarWarsFilm(Integer.parseInt(id), filmDTO.getTitle(), filmDTO.getEpisodeId()));
         }
+        return starWarsFilms;
+//        try {
+//            List<FilmDTO> filmDTOs = filmService.getAllFilms();
+//            List<StarWarsFilm> starWarsFilms = new ArrayList<>();
+//            for (FilmDTO filmDTO : filmDTOs) {
+//                String id = filmDTO.getUrl().split("/")[5];
+//                starWarsFilms.add(new StarWarsFilm(id, filmDTO.getTitle(), filmDTO.getEpisodeId()));
+//            }
+//            return Optional.of(starWarsFilms);
+//        } catch (Exception e) {
+//            return Optional.empty();
+//        }
     }
 
 //    public Optional<StarWarsFilm> getFilmById(String filmId)  {
@@ -113,10 +134,10 @@ public class FacadeService {
 //        }
 //    }
 
-    public StarWarsFilm getFilmById(String filmId)  {
+    public StarWarsFilm getFilmById(Integer filmId)  {
         FilmDTO filmDTO = filmService.getFilmById(filmId);
         String id = filmDTO.getUrl().split("/")[5];
-        return new StarWarsFilm(id, filmDTO.getTitle(), filmDTO.getEpisodeId());
+        return new StarWarsFilm(Integer.parseInt(id), filmDTO.getTitle(), filmDTO.getEpisodeId());
     }
 
     public List<StarWarsCharacter> getAllCharacters() {

@@ -48,11 +48,8 @@ public class FilmService {
         return filmDTOs;
     }
 
-
-    public FilmDTO getFilmById(String filmId) {
-
+    public FilmDTO getFilmById(Integer filmId) {
         return restTemplate.getForObject(SWAPI_API_FILMS + filmId, FilmDTO.class);
-
     }
 
 //        ResponseEntity<FilmDTO> filmDTOResponseEntity = null;
@@ -86,7 +83,7 @@ public class FilmService {
 //                case SERVICE_UNAVAILABLE:
 //                    throw new ServiceUnavailableException();
 //                case GATEWAY_TIMEOUT:
-//                    throw  new GatewayTimeout();
+//                    throw  new GatewayTimeoutException();
 //                case BAD_GATEWAY:
 //                    throw new BadGatewayException();
 //                default:

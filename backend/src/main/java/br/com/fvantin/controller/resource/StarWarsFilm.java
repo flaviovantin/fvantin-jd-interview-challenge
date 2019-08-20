@@ -4,7 +4,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 public class StarWarsFilm extends ResourceSupport {
 
-    private String filmId;
+    private Integer filmId;
     private String title;
     private String episodeNumber;
 
@@ -12,17 +12,17 @@ public class StarWarsFilm extends ResourceSupport {
         super();
     }
 
-    public StarWarsFilm(String filmId, String title, String episodeNumber) {
+    public StarWarsFilm(Integer filmId, String title, String episodeNumber) {
         this.filmId = filmId;
         this.title = title;
         this.episodeNumber = episodeNumber;
     }
 
-    public String getFilmId() {
+    public Integer getFilmId() {
         return filmId;
     }
 
-    public void setFilmId(String filmId) {
+    public void setFilmId(Integer filmId) {
         this.filmId = filmId;
     }
 

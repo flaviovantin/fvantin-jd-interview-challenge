@@ -6,6 +6,9 @@ import java.util.List;
 
 public class StarWarsSpeciesByFilm extends ResourceSupport {
 
+    // TODO mudar isso. O resource de retorno deve conter a mensagem explicativa de sucesso ou erro
+    //                  e um array com os nomes dos characters (personagens) com a mesma especie deste filme
+
     private String filmName;
     private String specieName;
     private List<String> species;

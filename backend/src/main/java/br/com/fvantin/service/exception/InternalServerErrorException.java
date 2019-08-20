@@ -5,6 +5,6 @@ public class InternalServerErrorException extends RuntimeException {
     private static final long serialVersionUID = -7736238268065735919L;
 
     public InternalServerErrorException() {
-        super();
+        super("Stranger Things occurred... :o");
     }
 }

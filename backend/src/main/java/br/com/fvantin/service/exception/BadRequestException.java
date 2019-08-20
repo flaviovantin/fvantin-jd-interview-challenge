@@ -5,6 +5,6 @@ public class BadRequestException extends RuntimeException {
     private static final long serialVersionUID = 8484549195373799654L;
 
     public BadRequestException() {
-        super();
+        super("Bad Request on Star Wars (swapi.co) server.");
     }
 }
