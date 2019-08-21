@@ -1,0 +1,23 @@
+
+npx create-react-app frontend
+
+npm install --save react
+npm install --save react-dom
+npm install --save redux
+npm install --save react-redux
+npm install --save redux-thunk
+npm install --save redux-logger
+npm install --save react-router-dom
+npm install --save react-bootstrap@0.32.4
+npm install --save bootstrap@3.3.7
+npm install --save normalize.css
+npm install --save react-emotion@9.1.1
+npm install --save react-spinners@0.4.7
+
+/public/index.html
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
+
+npm start
+npm run build
+

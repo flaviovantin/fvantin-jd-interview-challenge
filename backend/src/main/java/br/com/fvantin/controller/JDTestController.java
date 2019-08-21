@@ -36,6 +36,7 @@ public class JDTestController {
     //      /api                                    --> Página inicial Welcome
     //      /api/jdtest                             --> Página inicial frontend (com arrays preenchidos de film/character)
     //      /api/jdtest?film_id=1&character_id=8    --> Request para "calculo"
+//    @CrossOrigin
 //    @GetMapping("/")
 //    public HttpEntity<Greetings> slash() {
 //        Greetings greetings = new Greetings();
@@ -43,6 +44,7 @@ public class JDTestController {
 //        return greetingsResponseEntity;
 //    }
 
+    @CrossOrigin
     @GetMapping(produces = { APPLICATION_HAL_JSON })
     public Resource<StarWarsSpeciesByFilm> jdtest(@Valid @RequestParam(value="film_id") Integer filmId, @Valid @RequestParam(value="character_id") Integer characterId) {
 
@@ -63,6 +65,7 @@ public class JDTestController {
         return new Resource<>(starWarsSpeciesByFilm);
     }
 
+    @CrossOrigin
     @GetMapping(value = "/films", produces = { APPLICATION_HAL_JSON })
     public Resources<StarWarsFilm> getAllFilms() {
         List<StarWarsFilm> films = null;
@@ -84,6 +87,7 @@ public class JDTestController {
         return new Resources<>(films, collectionLink);
     }
 
+    @CrossOrigin
     @GetMapping(value = "/films/{filmId}", produces = { APPLICATION_HAL_JSON })
     public Resource<StarWarsFilm> getFilmById(@Valid @PathVariable final Integer filmId) {
         StarWarsFilm starWarsFilm = null;
@@ -104,6 +108,7 @@ public class JDTestController {
         return new Resource<>(starWarsFilm);
     }
 
+    @CrossOrigin
     @GetMapping(value = "/characters", produces = { APPLICATION_HAL_JSON })
     public Resources<StarWarsCharacter> getAllCharacters() {
         List<StarWarsCharacter> characters = null;
@@ -125,6 +130,7 @@ public class JDTestController {
         return new Resources<>(characters, collectionLink);
     }
 
+    @CrossOrigin
     @GetMapping(value = "/characters/{characterId}", produces = { APPLICATION_HAL_JSON })
     public Resource<StarWarsCharacter> getCharacterById(@PathVariable final Integer characterId) {
         StarWarsCharacter starWarsCharacter = null;
