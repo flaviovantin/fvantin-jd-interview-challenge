@@ -28,10 +28,6 @@ public class JDTestController {
 
     public static final String APPLICATION_HAL_JSON = "application/hal+json";
 
-    // TODO tentar usar Autowired depois
-//    @Autowired
-//    RestTemplate restTemplate;
-
     @Autowired
     private ServiceFacade serviceFacade;
 
