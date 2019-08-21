@@ -18,7 +18,7 @@ public class SpeciesService {
 
     public SpeciesService(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder
-                .additionalInterceptors((request, body, execution) -> { // TODO checar se necessario
+                .additionalInterceptors((request, body, execution) -> {
                     request.getHeaders().add("user-agent", "spring");
                     return execution.execute(request, body);
                 })
@@ -28,7 +28,6 @@ public class SpeciesService {
 
     public List<SpeciesDTO> getAllSpecies() {
         SpeciesListDTO species = restTemplate.getForObject(SWAPI_API_SPECIES, SpeciesListDTO.class);
-
         // Results from SWAPI.co are paged
         List<SpeciesDTO> speciesDTOs = new ArrayList<>();
         boolean hasMoreResultPage = true;
@@ -46,7 +45,7 @@ public class SpeciesService {
         return speciesDTOs;
     }
 
-    public SpeciesDTO getSpeciesById(String speciesId) {
+    public SpeciesDTO getSpeciesById(Integer speciesId) {
         return restTemplate.getForObject(SWAPI_API_SPECIES + speciesId, SpeciesDTO.class);
     }
 }

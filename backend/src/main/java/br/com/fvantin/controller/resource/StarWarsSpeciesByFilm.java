@@ -6,26 +6,21 @@ import java.util.List;
 
 public class StarWarsSpeciesByFilm extends ResourceSupport {
 
-    // TODO mudar isso. O resource de retorno deve conter a mensagem explicativa de sucesso ou erro
-    //                  e um array com os nomes dos characters (personagens) com a mesma especie deste filme
-
     private String filmName;
-    private String specieName;
-    private List<String> species;
-    private String warningMessage;
+    private String speciesName;
+    private List<String> characters;
+
+    // TODO --> 3 characters of the species 'Droid' appear in the film 'A New Hope': C-3PO, R2-D2, R5-D3
+    // TODO --> No 'Droid' characters appear in the movie 'A New Hope' :(
 
     public StarWarsSpeciesByFilm() {
         super();
     }
 
-    public StarWarsSpeciesByFilm(String filmName, String specieName, List<String> species) {
+    public StarWarsSpeciesByFilm(String filmName, String speciesName, List<String> characters) {
         this.filmName = filmName;
-        this.specieName = specieName;
-        this.species = species;
-    }
-
-    public StarWarsSpeciesByFilm(String warningMessage) {
-        this.warningMessage = warningMessage;
+        this.speciesName = speciesName;
+        this.characters = characters;
     }
 
     public String getFilmName() {
@@ -36,27 +31,19 @@ public class StarWarsSpeciesByFilm extends ResourceSupport {
         this.filmName = filmName;
     }
 
-    public String getSpecieName() {
-        return specieName;
+    public String getSpeciesName() {
+        return speciesName;
     }
 
-    public void setSpecieName(String specieName) {
-        this.specieName = specieName;
+    public void setSpeciesName(String speciesName) {
+        this.speciesName = speciesName;
     }
 
-    public List<String> getSpecies() {
-        return species;
+    public List<String> getCharacters() {
+        return characters;
     }
 
-    public void setSpecies(List<String> species) {
-        this.species = species;
-    }
-
-    public String getWarningMessage() {
-        return warningMessage;
-    }
-
-    public void setWarningMessage(String warningMessage) {
-        this.warningMessage = warningMessage;
+    public void setCharacters(List<String> characters) {
+        this.characters = characters;
     }
 }

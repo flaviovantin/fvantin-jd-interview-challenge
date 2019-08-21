@@ -5,8 +5,6 @@ import br.com.fvantin.service.dto.PeopleListDTO;
 import br.com.fvantin.service.exception.handler.SWApiResponseErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,7 +30,6 @@ public class CharacterService {
 
     public List<PeopleDTO> getAllCharacters() {
         PeopleListDTO people = restTemplate.getForObject(SWAPI_API_PEOPLE, PeopleListDTO.class);
-
         // Results from SWAPI.co are paged
         List<PeopleDTO> peopleDTOs = new ArrayList<>();
         boolean hasMoreResultPage = true;
@@ -50,13 +47,7 @@ public class CharacterService {
         return peopleDTOs;
     }
 
-    // TODO
-
-    public PeopleDTO getCharacterById(String characterId) {
+    public PeopleDTO getCharacterById(Integer characterId) {
         return restTemplate.getForObject(SWAPI_API_PEOPLE + characterId, PeopleDTO.class);
-    }
-
-    public ResponseEntity<PeopleDTO> getCharacterById2(String characterId) {
-        return restTemplate.exchange(SWAPI_API_PEOPLE + characterId, HttpMethod.GET, null, PeopleDTO.class);
     }
 }

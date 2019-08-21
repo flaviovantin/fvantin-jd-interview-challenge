@@ -4,23 +4,23 @@ import org.springframework.hateoas.ResourceSupport;
 
 public class StarWarsCharacter extends ResourceSupport {
 
-    private String characterId;
+    private Integer characterId;
     private String name;
 
     public StarWarsCharacter() {
         super();
     }
 
-    public StarWarsCharacter(String characterId, String name) {
+    public StarWarsCharacter(Integer characterId, String name) {
         this.characterId = characterId;
         this.name = name;
     }
 
-    public String getCharacterId() {
+    public Integer getCharacterId() {
         return characterId;
     }
 
-    public void setCharacterId(String characterId) {
+    public void setCharacterId(Integer characterId) {
         this.characterId = characterId;
     }
 

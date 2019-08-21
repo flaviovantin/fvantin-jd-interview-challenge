@@ -1,11 +1,9 @@
 package br.com.fvantin.service.exception.handler;
 
 import br.com.fvantin.service.exception.*;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.IOException;

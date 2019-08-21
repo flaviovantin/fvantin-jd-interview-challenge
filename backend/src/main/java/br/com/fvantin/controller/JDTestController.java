@@ -3,18 +3,15 @@ package br.com.fvantin.controller;
 import br.com.fvantin.controller.resource.StarWarsCharacter;
 import br.com.fvantin.controller.resource.StarWarsFilm;
 import br.com.fvantin.controller.resource.StarWarsSpeciesByFilm;
-import br.com.fvantin.service.FacadeService;
+import br.com.fvantin.service.ServiceFacade;
 import br.com.fvantin.service.exception.*;
-import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -36,7 +33,7 @@ public class JDTestController {
 //    RestTemplate restTemplate;
 
     @Autowired
-    private FacadeService facadeService;
+    private ServiceFacade serviceFacade;
 
     // TODO >>>> Estudar como fazer os redirecionamentos:
     //      /                                       --> Página inicial Welcome
@@ -50,35 +47,38 @@ public class JDTestController {
 //        return greetingsResponseEntity;
 //    }
 
-    @GetMapping(value = "/error", produces = { APPLICATION_HAL_JSON })
-    public HttpResponse error() {
-        return null;
-    }
-
     @GetMapping(produces = { APPLICATION_HAL_JSON })
-    public Resource<StarWarsSpeciesByFilm> jdtest(@Valid @RequestParam(value="film_id") Integer filmId, @Valid @RequestParam(value="character_id") String characterId) {
+    public Resource<StarWarsSpeciesByFilm> jdtest(@Valid @RequestParam(value="film_id") Integer filmId, @Valid @RequestParam(value="character_id") Integer characterId) {
+
         // TODO IMPORTANT! Implementing authenticantion via API. Spring XYZ Security ??
         //                 curl -u user:password localhost:8080/api/jdtest
-        // Resource<StarWarsSpeciesByFilm> starWarsSpeciesByFilmResource = new Resource<>();
-        StarWarsSpeciesByFilm starWarsSpeciesByFilm = facadeService.getSimilarSpeciesByFilm(filmId, characterId);
-        if (StringUtils.isEmpty(starWarsSpeciesByFilm.getWarningMessage())) {
-            // Resources
+
+        StarWarsSpeciesByFilm starWarsSpeciesByFilm = null;
+        try {
+            starWarsSpeciesByFilm = serviceFacade.getSimilarSpeciesByFilm(filmId, characterId);
+            Link selfLink = linkTo(methodOn(JDTestController.class).jdtest(filmId, characterId)).withSelfRel();
+            starWarsSpeciesByFilm.add(selfLink);
+            Link filmsLink = linkTo(methodOn(JDTestController.class).getAllFilms()).withRel("films");
+            Link charactersLink = linkTo(methodOn(JDTestController.class).getAllCharacters()).withRel("characters");
+            starWarsSpeciesByFilm.add(filmsLink, charactersLink);
+        } catch (RuntimeException rte) {
+            handleException(rte);
         }
-        return null;
+        return new Resource<>(starWarsSpeciesByFilm);
     }
 
     @GetMapping(value = "/films", produces = { APPLICATION_HAL_JSON })
     public Resources<StarWarsFilm> getAllFilms() {
         List<StarWarsFilm> films = null;
         try {
-            films = facadeService.getAllFilms();
+            films = serviceFacade.getAllFilms();
             for (StarWarsFilm starWarsFilm : films) {
                 Link selfLink = linkTo(methodOn(JDTestController.class).getFilmById(starWarsFilm.getFilmId())).withSelfRel();
                 starWarsFilm.add(selfLink);
             }
         } catch (RuntimeException rte) {
             if (rte instanceof ResourceNotFoundException) {
-                String msg = "No movies found on swapi.co server. This is very weird...";
+                String msg = "No movies found on swapi.co server. Weird...";
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, msg, rte);
             } else {
                 handleException(rte);
@@ -92,7 +92,7 @@ public class JDTestController {
     public Resource<StarWarsFilm> getFilmById(@Valid @PathVariable final Integer filmId) {
         StarWarsFilm starWarsFilm = null;
         try {
-            starWarsFilm = facadeService.getFilmById(filmId);
+            starWarsFilm = serviceFacade.getFilmById(filmId);
             Link selfLink = linkTo(methodOn(JDTestController.class).getFilmById(starWarsFilm.getFilmId())).withSelfRel();
             starWarsFilm.add(selfLink);
             Link collectionLink = linkTo(methodOn(JDTestController.class).getAllFilms()).withRel("all");
@@ -110,28 +110,42 @@ public class JDTestController {
 
     @GetMapping(value = "/characters", produces = { APPLICATION_HAL_JSON })
     public Resources<StarWarsCharacter> getAllCharacters() {
+        List<StarWarsCharacter> characters = null;
         try {
-            final List<StarWarsCharacter> characters = facadeService.getAllCharacters();
+            characters = serviceFacade.getAllCharacters();
             for (StarWarsCharacter starWarsCharacter : characters) {
                 Link selfLink = linkTo(methodOn(JDTestController.class).getCharacterById(starWarsCharacter.getCharacterId())).withSelfRel();
                 starWarsCharacter.add(selfLink);
             }
-            Link collectionLink = linkTo(methodOn(JDTestController.class).getAllCharacters()).withSelfRel();
-            return new Resources<>(characters, collectionLink);
-        } catch (RestClientException rce) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Error requesting SWAPI.co server :(", rce);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops internal server error :(", e);
+        } catch (RuntimeException rte) {
+            if (rte instanceof ResourceNotFoundException) {
+                String msg = "No characters found on swapi.co server. Strange...";
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, msg, rte);
+            } else {
+                handleException(rte);
+            }
         }
+        Link collectionLink = linkTo(methodOn(JDTestController.class).getAllCharacters()).withSelfRel();
+        return new Resources<>(characters, collectionLink);
     }
 
     @GetMapping(value = "/characters/{characterId}", produces = { APPLICATION_HAL_JSON })
-    public Resource<StarWarsCharacter> getCharacterById(@PathVariable final String characterId) {
-        StarWarsCharacter starWarsCharacter = facadeService.getCharacterById(characterId);
-        Link selfLink = linkTo(methodOn(JDTestController.class).getCharacterById(starWarsCharacter.getCharacterId())).withSelfRel();
-        starWarsCharacter.add(selfLink);
-        Link collectionLink = linkTo(methodOn(JDTestController.class).getAllCharacters()).withRel("all");
-        starWarsCharacter.add(collectionLink);
+    public Resource<StarWarsCharacter> getCharacterById(@PathVariable final Integer characterId) {
+        StarWarsCharacter starWarsCharacter = null;
+        try {
+            starWarsCharacter = serviceFacade.getCharacterById(characterId);
+            Link selfLink = linkTo(methodOn(JDTestController.class).getCharacterById(starWarsCharacter.getCharacterId())).withSelfRel();
+            starWarsCharacter.add(selfLink);
+            Link collectionLink = linkTo(methodOn(JDTestController.class).getAllCharacters()).withRel("all");
+            starWarsCharacter.add(collectionLink);
+        } catch (RuntimeException rte) {
+            if (rte instanceof ResourceNotFoundException) {
+                StringBuilder msg = new StringBuilder( "Star Wars character not found (id: ").append(characterId).append("). Characters range from 1 to 87.");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, msg.toString(), rte);
+            } else {
+                handleException(rte);
+            }
+        }
         return new Resource<>(starWarsCharacter);
     }
 
