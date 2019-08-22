@@ -33,6 +33,7 @@ class JDChallengeComponent extends Component {
 
   processSpeciesByFilm = (filmId, characterId) => {
     this.props.screenLoading(true)
+    this.props.clearListResult()
     this.props.retrieveSpeciesByFilm(filmId, characterId)
   }
 
@@ -142,7 +143,6 @@ class JDChallengeComponent extends Component {
       </div>
     )
   }
-
 }
 
 function mapStateToProps(state) {

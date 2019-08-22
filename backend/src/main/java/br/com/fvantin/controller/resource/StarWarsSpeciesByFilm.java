@@ -10,9 +10,6 @@ public class StarWarsSpeciesByFilm extends ResourceSupport {
     private String speciesName;
     private List<String> characters;
 
-    // TODO --> 3 characters of the species 'Droid' appear in the film 'A New Hope': C-3PO, R2-D2, R5-D3
-    // TODO --> No 'Droid' characters appear in the movie 'A New Hope' :(
-
     public StarWarsSpeciesByFilm() {
         super();
     }

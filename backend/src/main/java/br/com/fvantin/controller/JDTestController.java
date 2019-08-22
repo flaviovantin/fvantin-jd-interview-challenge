@@ -32,25 +32,8 @@ public class JDTestController {
     @Autowired
     private ServiceFacade serviceFacade;
 
-    // TODO >>>> Estudar como fazer os redirecionamentos:
-    //      /                                       --> Página inicial Welcome
-    //      /api                                    --> Página inicial Welcome
-    //      /api/jdtest                             --> Página inicial frontend (com arrays preenchidos de film/character)
-    //      /api/jdtest?film_id=1&character_id=8    --> Request para "calculo"
-//    @CrossOrigin
-//    @GetMapping("/")
-//    public HttpEntity<Greetings> slash() {
-//        Greetings greetings = new Greetings();
-//        ResponseEntity<Greetings> greetingsResponseEntity = new ResponseEntity<>(greetings, HttpStatus.OK);
-//        return greetingsResponseEntity;
-//    }
-
     @GetMapping(produces = { APPLICATION_HAL_JSON })
     public Resource<StarWarsSpeciesByFilm> jdtest(@Valid @RequestParam(value="film_id") Integer filmId, @Valid @RequestParam(value="character_id") Integer characterId) {
-
-        // TODO IMPORTANT! Implementing authenticantion via API. Spring XYZ Security ??
-        //                 curl -u user:password localhost:8080/api/jdtest
-
         StarWarsSpeciesByFilm starWarsSpeciesByFilm = null;
         try {
             starWarsSpeciesByFilm = serviceFacade.getSimilarSpeciesByFilm(filmId, characterId);

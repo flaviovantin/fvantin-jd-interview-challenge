@@ -1,5 +1,5 @@
 import { 
-  GET_FILMS, GET_CHARACTERS, GET_SPECIES_BY_FILM, LOADING, CLOSE_ERROR_MODAL 
+  GET_FILMS, GET_CHARACTERS, GET_SPECIES_BY_FILM, CLEAR_LIST_RESULT, LOADING, CLOSE_ERROR_MODAL 
 } from '../actions/JDChallengeActions'
   
   const initialState = {
@@ -37,6 +37,16 @@ import {
         return {
             ...state,
             result: payload
+        }
+
+      case CLEAR_LIST_RESULT:
+        return {
+          ...state,
+          result: {
+            characters: [],
+            filmName: undefined,
+            speciesName: undefined
+          }
         }
     
       case CLOSE_ERROR_MODAL:
