@@ -7,7 +7,7 @@ class Home extends Component {
     return (
       <div>
         <Grid>
-          <h4>Welcome!</h4>
+          <h4>Hi, I am Flávio Vantin!</h4>
           <Row>&nbsp;</Row>
           <h5>Please, read the following considerations.</h5>
           <Row>&nbsp;</Row>

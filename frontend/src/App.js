@@ -22,7 +22,7 @@ class App extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Interview Test - SWAPI.co</Link>
+              <Link to="/">JD Interview Test (swapi.co)</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

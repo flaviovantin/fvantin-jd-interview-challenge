@@ -5,6 +5,11 @@ import {
   const initialState = {
     films: [],  // { filmId: 0, title: 'Loading...' }
     characters: [],
+    result: {
+      characters: [],
+      filmName: undefined,
+      speciesName: undefined
+    },
     errorMessages: undefined,
     loading: false    
   }

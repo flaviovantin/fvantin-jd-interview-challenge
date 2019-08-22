@@ -18,7 +18,7 @@ class JDChallengeComponent extends Component {
       characterId: undefined,
       //films: undefined,
       //characters: undefined,
-      result: undefined
+      //result: undefined
     }
   }
 
@@ -28,6 +28,7 @@ class JDChallengeComponent extends Component {
 
   componentDidMount() {
     this.setState({
+      //result: this.props.jdChallengeReducer.result,
       showErrorModal: this.props.jdChallengeReducer.errorMessages ? true : false
     })
     this.props.retrieveFilms()
@@ -37,13 +38,56 @@ class JDChallengeComponent extends Component {
   processSpeciesByFilm = (filmId, characterId) => {
     this.props.screenLoading(true)
     this.props.retrieveSpeciesByFilm(filmId, characterId) // TODO descomentar
+    //this.setState({
+    //  result: undefined
+    //})
   }
+
+  // handleListHeader = (result) => {
+  //   alert('dsfsdfsd result:' + result)
+  //   if (!result) {
+  //     return 'No results yet... :|'
+  //   }
+
+  //   if (result && result.characters) {
+
+  //     if (result.characters.lenght > 0) {
+  //       return 'The following character(s) of the species \'' + result.speciesName + '\' appear(s) in the film \'' + result.filmName + '\':'
+  //     } else {
+  //       return 'Sorry, no \'' + result.speciesName + '\' characters appear in the movie \'' + result.filmName + '\'. Try again!'
+  //     }
+
+  //   } else {
+  //     return 'aaaa'
+  //   }
+  // }
+
+  // handleListItems = (result) => {
+  //   alert('444444444 result:' + result)
+  //   if (!result) {
+  //     return <ListGroupItem>222</ListGroupItem>
+  //   }
+
+  //   if (result && result.characters) {
+
+  //     if (result.characters.lenght > 0) {
+  //       return result.characters.sort().map((name, i) => (
+  //         <ListGroupItem>{name}</ListGroupItem>
+  //       ))
+  //     } else {
+  //       return <ListGroupItem>111</ListGroupItem>
+  //     }
+
+  //   } else {
+  //     return 'deu ruim'
+  //   }
+  // }
 
   clearFields = () => {
     this.setState({
-      filmId: '',         // 'Select' ??
-      characterId: '',    // 'Select' ??
-      result: ''
+      filmId: undefined,         // 'Select' ??
+      characterId: undefined //,    // 'Select' ??
+      //result: undefined
     })
   }
 
@@ -63,6 +107,17 @@ class JDChallengeComponent extends Component {
   }
 
   render() {
+
+    // let personas = !this.props.jdChallengeReducer.result ? undefined : this.props.jdChallengeReducer.result.characters
+    // console.log('>> this.props.jdChallengeReducer.result: ', this.props.jdChallengeReducer.result)
+    // console.log('>> this.props.jdChallengeReducer.result.characters: ', this.props.jdChallengeReducer.result ? this.props.jdChallengeReducer.result.characters : 'undefinidos')
+    // console.log('>> personas: ', personas)
+
+    // AQUI TA A TRETA 1
+
+    console.log('>> this.props.jdChallengeReducer.result.characters: ', this.props.jdChallengeReducer.result.characters)
+    console.log('>> this.props.jdChallengeReducer.result.characters.lenght > 0: ', this.props.jdChallengeReducer.result.characters.lenght > 0)
+
     return (
       <div>
       <Grid>
@@ -105,7 +160,7 @@ class JDChallengeComponent extends Component {
           </Col>
           <Col xs={12} md={2}>
             <ControlLabel>&nbsp;</ControlLabel>
-            <Button bsStyle="primary" onClick={() => this.processSpeciesByFilm(this.state.filmId ,this.state.characterId)}>Search</Button>
+            <Button bsStyle="primary" onClick={() => this.processSpeciesByFilm(this.state.filmId, this.state.characterId)}>Search</Button>
           </Col>
         </Row>
 
@@ -125,15 +180,73 @@ class JDChallengeComponent extends Component {
           }
         </Col>
 
+{
+ /*  "filmName": "A New Hope",
+  "speciesName": "Droid",
+  "characters": [
+    "C-3PO",
+    "R2-D2",
+    "R5-D4"
+  ],
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/jdtest?film_id=1&character_id=2"
+    },
+    "films": {
+      "href": "http://localhost:8080/api/jdtest/films"
+    },
+    "characters": {
+      "href": "http://localhost:8080/api/jdtest/characters"
+    }
+  } 
+  
+// 3 characters of the species 'Droid' appear in the film 'A New Hope': C-3PO, R2-D2, R5-D3
+// No 'Droid' characters appear in the movie 'A New Hope' :(
+
+  */
+}
         
         <Row>&nbsp;</Row>
         <Row>
           <Col xs={12} mdOffset={2} md={7}>
             <Panel>
-              <Panel.Heading>Results</Panel.Heading>
+              <Panel.Heading>
+              {
+
+                // AQUI TA A TRETA 2
+
+                this.props.jdChallengeReducer.result.characters.lenght > 0
+                  ? 'The following character(s) of the species \'' + this.props.jdChallengeReducer.result.speciesName + '\' appear(s) in the film \'' + this.props.jdChallengeReducer.result.filmName + '\':'
+                  : this.props.jdChallengeReducer.result.speciesName 
+                    ? 'Sorry, no \'' + this.props.jdChallengeReducer.result.speciesName + '\' characters appear in the movie \'' + this.props.jdChallengeReducer.result.filmName + '\'. Try again!'
+                    : 'No results yet... :|'
+
+                // this.props.jdChallengeReducer.result
+                //   ? this.props.jdChallengeReducer.result.characters | this.props.jdChallengeReducer.result.characters.lenght > 0 
+                //     ? 'The following character(s) of the species \'' + this.props.jdChallengeReducer.result.speciesName + '\' appear(s) in the film \'' + this.props.jdChallengeReducer.result.filmName + '\':'
+                //     : 'Sorry, no \'' + this.props.jdChallengeReducer.result.speciesName + '\' characters appear in the movie \'' + this.props.jdChallengeReducer.result.filmName + '\'. Try again!'
+                //   : 'No results yet... :|'
+                
+              }
+              </Panel.Heading>
               <ListGroup>
-                <ListGroupItem>Item 1</ListGroupItem>
-                <ListGroupItem>Item 2</ListGroupItem>
+              {
+                this.props.jdChallengeReducer.result.characters.lenght > 0
+                  ? this.props.jdChallengeReducer.result.characters.sort().map((name, i) => (
+                      <ListGroupItem>{name}</ListGroupItem>
+                    ))
+                  : this.props.jdChallengeReducer.result.speciesName 
+                    ? <ListGroupItem>111</ListGroupItem>
+                    : <ListGroupItem>222</ListGroupItem>
+
+                  // this.props.jdChallengeReducer.result.characters
+                  //   ? this.props.jdChallengeReducer.result.characters.lenght > 0 
+                  //     ? 'mostra algo em baixo' 
+                  //     : 'mostrar vazio'
+                  //   : <ListGroupItem></ListGroupItem>
+
+                //JSON.stringify(this.props.jdChallengeReducer.result)
+              }
               </ListGroup>
             </Panel>
           </Col>
