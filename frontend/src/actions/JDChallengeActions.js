@@ -56,6 +56,10 @@ export const retrieveSpeciesByFilm = (filmId, characterId) => {
           type: GET_SPECIES_BY_FILM,
           payload: response
         })
+        dispatch({
+          type: LOADING,
+          payload: false
+        })
       })
       .catch(error => {
         console.log(error)

@@ -8,10 +8,10 @@ class Home extends Component {
       <div>
         <Grid>
           <h4>Welcome!</h4>
+          <Row>&nbsp;</Row>
           <h5>Please, read the following considerations.</h5>
           <Row>&nbsp;</Row>
-          <h4>Considerations:</h4>
-          <h5>De acordo com os requisitos fornecidos para a implementação desta solução, foi considerado o seguinte:</h5>
+
           <ul>
             <li>Não há uma seleção dos Hubs de origem e destino. Isso poderia ser feito através de consultas por CEP na API dos Correios ou apresentando um mapa do Google Maps embutido na tela de cálculo de frete. Uma vez obtidas as coordenadas (Lat/Lng), poderia ser utilizado o Google Cloud Platform de forma a traçar rotas ou estipular distâncias. <br/>Para esta solução, considere a distância entre os Hubs fornecendo uma quilometragem total, por exemplo, 340 Km.</li>
             <li>Para os valores de pedágio, considere um valor total para o trajeto percorrido, por exemplo: 450.50 (ponto). Este valor não é mandatório para o cáculo.</li>

@@ -6,11 +6,11 @@ export const getFilms = () => {
 }
 
 export const getCharacters = () => {
-    return fetch('http://localhost:8080/api/jdtest/characters', {mode: 'no-cors'})
+    return fetch('http://localhost:8080/api/jdtest/characters')
     .then(responseHandle)
 }
 
 export const getSpeciesByFilm = (filmId, characterId) => {
-    return fetch('http://localhost:8080/api/jdtest?film_id=' + filmId + '&character_id=' + characterId, {mode: 'no-cors'})
+    return fetch('http://localhost:8080/api/jdtest?film_id=' + filmId + '&character_id=' + characterId)
     .then(responseHandle)
 }

@@ -1,11 +1,11 @@
 import { 
-    GET_FILMS, GET_CHARACTERS, GET_SPECIES_BY_FILM, LOADING, CLOSE_ERROR_MODAL 
-  } from '../actions/JDChallengeActions'
+  GET_FILMS, GET_CHARACTERS, GET_SPECIES_BY_FILM, LOADING, CLOSE_ERROR_MODAL 
+} from '../actions/JDChallengeActions'
   
   const initialState = {
-    films: [],
+    films: [],  // { filmId: 0, title: 'Loading...' }
     characters: [],
-    errorMessages: [],
+    errorMessages: undefined,
     loading: false    
   }
   
@@ -19,20 +19,20 @@ import {
       case GET_FILMS:
         return {
           ...state,
-          films: payload,
+          films: payload._embedded.starWarsFilmList.sort((a, b) => a.episodeNumber.localeCompare(b.episodeNumber))
         }
   
       case GET_CHARACTERS:
-      return {
-        ...state,
-        characters: payload,
-      }
+        return {
+          ...state,
+          characters: payload._embedded.starWarsCharacterList.sort((a, b) => a.name.localeCompare(b.name))
+        }
 
       case GET_SPECIES_BY_FILM:
-      return {
-          ...state,
-          result: payload
-      }
+        return {
+            ...state,
+            result: payload
+        }
     
       case CLOSE_ERROR_MODAL:
         return {

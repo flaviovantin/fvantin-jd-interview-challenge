@@ -22,14 +22,14 @@ class App extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">JD Interview Challenge (SWAPI.co)</Link>
+              <Link to="/">Interview Test - SWAPI.co</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={2}><Link to="/speciesandfilms">Star Wars Species & Films</Link></NavItem>
-              <NavItem eventKey={32}><Link to="/aboutcandidate">About the Candidate</Link></NavItem>
+              <NavItem eventKey={2}><Link to="/speciesandfilms">Search Species & Films</Link></NavItem>
+              <NavItem eventKey={32}><Link to="/aboutcandidate">Candidate Infos</Link></NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
