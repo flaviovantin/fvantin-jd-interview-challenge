@@ -3,7 +3,7 @@ import {
 } from '../actions/JDChallengeActions'
   
   const initialState = {
-    films: [],  // { filmId: 0, title: 'Loading...' }
+    films: [],
     characters: [],
     result: {
       characters: [],
