@@ -13,8 +13,8 @@ class AboutComponent extends Component {
             <Row>&nbsp;</Row>
             <ul>
               <li><h5><a target="_blank" href={"https://www.linkedin.com/in/vantin"} style={{cursor: "pointer", color: "dimgray"}}>LinkedIn Profile</a></h5></li>
-              <li><h5>Email: vantin@gmail.com</h5></li>
-              <li><h5>Cell: (19) 99301-8300 (WhatsApp)</h5></li>
+              <li><h5>Email: ***@gmail.com</h5></li>
+              <li><h5>Cell: (19) ***01-**00 (WhatsApp)</h5></li>
             </ul>
           </Col>
         </Grid>
